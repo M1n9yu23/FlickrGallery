@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "com.bignerdranch.android.photogallery"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.bignerdranch.android.photogallery"
@@ -36,6 +36,8 @@ android {
 }
 
 dependencies {
+
+    implementation("androidx.recyclerview:recyclerview:1.3.2")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
