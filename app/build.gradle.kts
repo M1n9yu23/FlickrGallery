@@ -38,6 +38,13 @@ android {
 dependencies {
 
     implementation("androidx.recyclerview:recyclerview:1.3.2")
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-scalars:2.9.0")
+    implementation("com.google.code.gson:gson:2.10.1")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.7")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.7")
+    implementation("androidx.work:work-runtime-ktx:2.10.0")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
