@@ -1,8 +1,10 @@
 package com.bignerdranch.android.photogallery
 
 import android.Manifest
+import android.app.Notification
 import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.util.Log
 import androidx.core.app.ActivityCompat
@@ -58,26 +60,29 @@ class PollWorker(val context: Context, workerParams: WorkerParameters)
                 .setAutoCancel(true)
                 .build()
 
-            with(NotificationManagerCompat.from(context)){
-                if (ActivityCompat.checkSelfPermission(
-                        context,
-                        Manifest.permission.POST_NOTIFICATIONS
-                    ) != PackageManager.PERMISSION_GRANTED
-                ) {
-                    // TODO: Consider calling
-                    //    ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for ActivityCompat#requestPermissions for more details.
-                    return@with
-                }
-
-                notify(0, notification)
-            }
+            showBackgroundNotification(0, notification)
         }
 
         return Result.success()
+    }
+
+    private fun showBackgroundNotification(
+        requestCode: Int,
+        notification: Notification
+    ){
+        val intent = Intent(ACTION_SHOW_NOTIFICATION).apply{
+            putExtra(REQUEST_CODE, requestCode)
+            putExtra(NOTIFICATION, notification)
+        }
+
+        context.sendOrderedBroadcast(intent, PERM_PRIVATE)
+
+    }
+
+    companion object {
+        const val ACTION_SHOW_NOTIFICATION = "com.bignerdranch.android.photogallery.SHOW_NOTIFICATION"
+        const val PERM_PRIVATE = "com.bignerdranch.android.photogallery.PRIVATE"
+        const val REQUEST_CODE = "REQUEST_CODE"
+        const val NOTIFICATION = "NOTIFICATION"
     }
 }
