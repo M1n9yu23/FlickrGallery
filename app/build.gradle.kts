@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -15,6 +17,15 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        val localProperties = Properties()
+        val localFile = rootProject.file("local.properties")
+        if(localFile.exists()){
+            localProperties.load(localFile.inputStream())
+        }
+        val apiKey = localProperties.getProperty("my_api") ?: ""
+
+        buildConfigField("String", "MY_API", "\"$apiKey\"")
     }
 
     buildTypes {
@@ -32,6 +43,9 @@ android {
     }
     kotlinOptions {
         jvmTarget = "11"
+    }
+    buildFeatures {
+        buildConfig = true
     }
 }
 
