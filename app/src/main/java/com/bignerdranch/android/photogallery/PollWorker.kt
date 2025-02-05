@@ -1,21 +1,17 @@
 package com.bignerdranch.android.photogallery
 
-import android.Manifest
 import android.app.Notification
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.util.Log
-import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 
 private const val TAG = "PollWorker"
 
-class PollWorker(val context: Context, workerParams: WorkerParameters)
+class PollWorker(private val context: Context, workerParams: WorkerParameters)
     : Worker(context, workerParams) {
 
     override fun doWork(): Result {

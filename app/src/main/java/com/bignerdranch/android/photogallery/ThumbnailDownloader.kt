@@ -15,7 +15,10 @@ import java.util.concurrent.ConcurrentHashMap
 
 private const val TAG = "ThumbnailDownloader"
 private const val MESSAGE_DOWNLOAD = 0
+
 // in 입력 (자신이나 상위), out 출력 (자신이나 하위)
+
+@Deprecated("Glide 사용으로 이 클래스는 사용 X")
 class ThumbnailDownloader<in T>(
     private val responseHandler: Handler,
     private val onThumbnailDownloaded: (T, Bitmap) -> Unit

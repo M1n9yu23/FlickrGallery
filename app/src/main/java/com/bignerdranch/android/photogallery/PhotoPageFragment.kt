@@ -24,7 +24,12 @@ class PhotoPageFragment: VisibleFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        uri = arguments?.getParcelable(ARG_URI) ?: Uri.EMPTY
+        uri = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+            arguments?.getParcelable(ARG_URI, Uri::class.java) ?: Uri.EMPTY
+        } else {
+            @Suppress("DEPRECATION") // API 32 이하
+            arguments?.getParcelable(ARG_URI) ?: Uri.EMPTY
+        }
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -58,6 +63,17 @@ class PhotoPageFragment: VisibleFragment() {
         webView.loadUrl(uri.toString())
 
         return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        // WebView가 Fragment에서 제거될 때 정리 (메모리 누수 방지)
+        webView.apply {
+            stopLoading()
+            clearHistory()
+            removeAllViews()
+            destroy()
+        }
     }
 
     companion object {

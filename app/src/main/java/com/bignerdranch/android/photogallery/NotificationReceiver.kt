@@ -7,6 +7,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.os.Build
 import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationManagerCompat
@@ -23,7 +24,19 @@ class NotificationReceiver: BroadcastReceiver() {
         }
 
         val requestCode = intent.getIntExtra(PollWorker.REQUEST_CODE, 0)
-        val notification: Notification = intent.getParcelableExtra(PollWorker.NOTIFICATION)!!
+
+        // Android 13(API 33) 이상에서는 getParcelableExtra()가 deprecated 되었음 대체 API 사용
+        val notification: Notification? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            intent.getParcelableExtra(PollWorker.NOTIFICATION, Notification::class.java)
+        } else {
+            @Suppress("DEPRECATION")
+            intent.getParcelableExtra(PollWorker.NOTIFICATION) // API 32이하
+        }
+
+        if (notification == null) {
+            Log.e(TAG, "Notification NUll")
+            return
+        }
 
         with(NotificationManagerCompat.from(context)){
             if (ActivityCompat.checkSelfPermission(
