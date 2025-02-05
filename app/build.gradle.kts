@@ -6,11 +6,11 @@ plugins {
 }
 
 android {
-    namespace = "com.bignerdranch.android.photogallery"
+    namespace = "com.bossmg.android.flickrgallery"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.bignerdranch.android.photogallery"
+        applicationId = "com.bossmg.android.flickrgallery"
         minSdk = 24
         targetSdk = 34
         versionCode = 1

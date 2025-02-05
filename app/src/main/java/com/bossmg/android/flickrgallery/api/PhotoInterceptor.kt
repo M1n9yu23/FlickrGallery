@@ -1,6 +1,6 @@
-package com.bignerdranch.android.photogallery.api
+package com.bossmg.android.flickrgallery.api
 
-import com.bignerdranch.android.photogallery.BuildConfig
+import com.bossmg.android.flickrgallery.BuildConfig
 import okhttp3.HttpUrl
 import okhttp3.Interceptor
 import okhttp3.Request

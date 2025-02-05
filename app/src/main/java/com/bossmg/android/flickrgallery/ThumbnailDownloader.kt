@@ -1,4 +1,4 @@
-package com.bignerdranch.android.photogallery
+package com.bossmg.android.flickrgallery
 
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
@@ -9,8 +9,6 @@ import android.util.Log
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
-import kotlinx.coroutines.NonCancellable.start
-import org.jetbrains.annotations.ApiStatus.OverrideOnly
 import java.util.concurrent.ConcurrentHashMap
 
 private const val TAG = "ThumbnailDownloader"

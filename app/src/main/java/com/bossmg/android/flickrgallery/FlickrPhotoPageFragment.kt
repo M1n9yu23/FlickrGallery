@@ -1,4 +1,4 @@
-package com.bignerdranch.android.photogallery
+package com.bossmg.android.flickrgallery
 
 import android.annotation.SuppressLint
 import android.net.Uri
@@ -15,7 +15,7 @@ import androidx.appcompat.app.AppCompatActivity
 
 private const val ARG_URI = "photo_page_url"
 
-class PhotoPageFragment: VisibleFragment() {
+class FlickrPhotoPageFragment: VisibleFragment() {
 
     private lateinit var uri: Uri
     private lateinit var webView: WebView
@@ -38,7 +38,7 @@ class PhotoPageFragment: VisibleFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_photo_page, container, false)
+        val view = inflater.inflate(R.layout.fragment_flickr_photo_page, container, false)
 
         progressBar = view.findViewById(R.id.progress_bar)
         progressBar.max = 100
@@ -77,8 +77,8 @@ class PhotoPageFragment: VisibleFragment() {
     }
 
     companion object {
-        fun newInstance(uri: Uri): PhotoPageFragment {
-            return PhotoPageFragment().apply {
+        fun newInstance(uri: Uri): FlickrPhotoPageFragment {
+            return FlickrPhotoPageFragment().apply {
                 arguments = Bundle().apply {
                     putParcelable(ARG_URI, uri)
                 }

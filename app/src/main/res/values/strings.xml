@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">PhotoGallery</string>
+    <string name="app_name">FlickrGallery</string>
     <string name="search">검색</string>
     <string name="clear_search">검색 값 지움</string>
     <string name="notification_channel_name">FlickrFetchr</string>

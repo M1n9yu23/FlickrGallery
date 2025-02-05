@@ -1,4 +1,4 @@
-package com.bignerdranch.android.photogallery
+package com.bossmg.android.flickrgallery
 
 import android.Manifest
 import android.app.Activity

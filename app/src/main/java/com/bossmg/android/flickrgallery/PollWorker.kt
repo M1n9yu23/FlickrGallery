@@ -1,4 +1,4 @@
-package com.bignerdranch.android.photogallery
+package com.bossmg.android.flickrgallery
 
 import android.app.Notification
 import android.app.PendingIntent
@@ -42,7 +42,7 @@ class PollWorker(private val context: Context, workerParams: WorkerParameters)
             Log.i(TAG, "Got a new result: $resultId")
             QueryPreferences.setLastResultId(context, resultId)
 
-            val intent = PhotoGalleryActivity.newIntent(context)
+            val intent = FlickrGalleryActivity.newIntent(context)
             val pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
 
             val resources = context.resources
@@ -76,8 +76,8 @@ class PollWorker(private val context: Context, workerParams: WorkerParameters)
     }
 
     companion object {
-        const val ACTION_SHOW_NOTIFICATION = "com.bignerdranch.android.photogallery.SHOW_NOTIFICATION"
-        const val PERM_PRIVATE = "com.bignerdranch.android.photogallery.PRIVATE"
+        const val ACTION_SHOW_NOTIFICATION = "com.bossmg.android.flickrgallery.SHOW_NOTIFICATION"
+        const val PERM_PRIVATE = "com.bossmg.android.flickrgallery.PRIVATE"
         const val REQUEST_CODE = "REQUEST_CODE"
         const val NOTIFICATION = "NOTIFICATION"
     }

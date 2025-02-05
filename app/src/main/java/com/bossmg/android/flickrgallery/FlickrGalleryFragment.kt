@@ -1,11 +1,8 @@
-package com.bignerdranch.android.photogallery
+package com.bossmg.android.flickrgallery
 
 import android.content.Intent
-import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
@@ -35,12 +32,12 @@ import java.util.concurrent.TimeUnit
 import com.bumptech.glide.request.target.Target
 
 
-private const val TAG = "PhotoGalleryFragment"
+private const val TAG = "FlickrGalleryFragment"
 private const val POLL_WORK = "POLL_WORK"
 
-class PhotoGalleryFragment : VisibleFragment() {
+class FlickrGalleryFragment : VisibleFragment() {
     private lateinit var photoRecyclerView: RecyclerView
-    private lateinit var photoGalleryViewModel: PhotoGalleryViewModel
+    private lateinit var flickrGalleryViewModel: FlickrGalleryViewModel
 //    private lateinit var thumbnailDownloader: ThumbnailDownloader<PhotoHolder>
 
     override fun onCreateView(
@@ -49,7 +46,7 @@ class PhotoGalleryFragment : VisibleFragment() {
         savedInstanceState: Bundle?
     ): View {
         // Fragment의 레이아웃을 인플레이트하고 뷰를 반환
-        val view = inflater.inflate(R.layout.fragment_photo_gallery, container, false)
+        val view = inflater.inflate(R.layout.fragment_flickr_gallery, container, false)
 
         photoRecyclerView = view.findViewById(R.id.photo_recycler_view)
         photoRecyclerView.layoutManager = GridLayoutManager(context, 3) // 3개의 열을 가진 GridLayout 사용
@@ -64,7 +61,7 @@ class PhotoGalleryFragment : VisibleFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // ViewModel에서 데이터를 가져와 RecyclerView의 어댑터를 업데이트
-        photoGalleryViewModel.galleryItemLiveData.observe(
+        flickrGalleryViewModel.galleryItemLiveData.observe(
             viewLifecycleOwner,
             Observer { galleryItems ->
                 photoRecyclerView.adapter = PhotoAdapter(galleryItems)
@@ -82,7 +79,7 @@ class PhotoGalleryFragment : VisibleFragment() {
                     setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                         override fun onQueryTextSubmit(query: String): Boolean {
                             Log.d(TAG, "검색어 입력됨: $query")
-                            photoGalleryViewModel.fetchPhotos(query)
+                            flickrGalleryViewModel.fetchPhotos(query)
                             return true
                         }
 
@@ -94,7 +91,7 @@ class PhotoGalleryFragment : VisibleFragment() {
 
 //                    검색 아이콘을 다시 눌렀을 때, 이전 검색어를 유지하도록 설정
 //                    setOnSearchClickListener {
-//                        searchView.setQuery(photoGalleryViewModel.searchTerm, false)
+//                        searchView.setQuery(flickrGalleryViewModel.searchTerm, false)
 //                    }
 
                 }
@@ -114,7 +111,7 @@ class PhotoGalleryFragment : VisibleFragment() {
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 return when (menuItem.itemId) {
                     R.id.menu_item_clear -> {
-                        photoGalleryViewModel.fetchPhotos("")
+                        flickrGalleryViewModel.fetchPhotos("")
                         true
                     }
                     R.id.menu_item_toggle_polling -> {
@@ -177,7 +174,7 @@ class PhotoGalleryFragment : VisibleFragment() {
         }
 
         override fun onClick(p0: View?) {
-            val intent = PhotoPageActivity.newIntent(requireContext(), galleryItem.photoPageUri)
+            val intent = FlickrPhotoPageActivity.newIntent(requireContext(), galleryItem.photoPageUri)
             startActivity(intent)
         }
 
@@ -250,7 +247,7 @@ class PhotoGalleryFragment : VisibleFragment() {
         // retainInstance = true 이렇게 유보 하는건 피해야함. FragmentManager가 자동으로 Fragment 상태를 복원하므로 불필요함.
         // setHasOptionsMenu(true) MenuProvider를 사용하므로 불필요
 
-        photoGalleryViewModel = ViewModelProvider(this).get(PhotoGalleryViewModel::class.java)
+        flickrGalleryViewModel = ViewModelProvider(this).get(FlickrGalleryViewModel::class.java)
 
         // Handler 생성 방식을 최신 방식으로 변경 (deprecated된 기본 생성자 제거)
         /*
@@ -283,7 +280,7 @@ class PhotoGalleryFragment : VisibleFragment() {
             setOnQueryTextListener(object: SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String): Boolean {
                     Log.d(TAG, "QueryTextSubmit: $query")
-                    photoGalleryViewModel.fetchPhotos(query)
+                    flickrGalleryViewModel.fetchPhotos(query)
                     return true
                 }
 
@@ -293,7 +290,7 @@ class PhotoGalleryFragment : VisibleFragment() {
                 }
             })
             setOnSearchClickListener {
-                searchView.setQuery(photoGalleryViewModel.searchTerm, false)
+                searchView.setQuery(flickrGalleryViewModel.searchTerm, false)
             }
         }
 
@@ -314,7 +311,7 @@ class PhotoGalleryFragment : VisibleFragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when(item.itemId) {
             R.id.menu_item_clear -> {
-                photoGalleryViewModel.fetchPhotos("")
+                flickrGalleryViewModel.fetchPhotos("")
                 true
             }
             R.id.menu_item_toggle_polling -> {
@@ -352,6 +349,6 @@ class PhotoGalleryFragment : VisibleFragment() {
     }
 
     companion object {
-        fun newInstance() = PhotoGalleryFragment()
+        fun newInstance() = FlickrGalleryFragment()
     }
 }

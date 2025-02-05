@@ -1,31 +1,28 @@
-package com.bignerdranch.android.photogallery
+package com.bossmg.android.flickrgallery
 
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 
-class PhotoPageActivity : AppCompatActivity() {
+class FlickrPhotoPageActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_photo_page)
+        setContentView(R.layout.activity_flickr_photo_page)
 
         val fm = supportFragmentManager
         val currentFragment = fm.findFragmentById(R.id.fragment_container)
 
         if(currentFragment == null) {
-            val fragment = PhotoPageFragment.newInstance(intent.data!!)
+            val fragment = FlickrPhotoPageFragment.newInstance(intent.data!!)
             fm.beginTransaction().add(R.id.fragment_container, fragment).commit()
         }
     }
 
     companion object{
         fun newIntent(context: Context, photoPageUri: Uri) : Intent {
-            return Intent(context, PhotoPageActivity::class.java).apply {
+            return Intent(context, FlickrPhotoPageActivity::class.java).apply {
                 data = photoPageUri
             }
         }
