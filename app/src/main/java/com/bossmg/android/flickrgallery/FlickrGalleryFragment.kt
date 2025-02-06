@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.MenuProvider
 import androidx.lifecycle.Lifecycle
@@ -40,7 +41,6 @@ class FlickrGalleryFragment : VisibleFragment() {
     private lateinit var photoRecyclerView: RecyclerView
     private lateinit var flickrGalleryViewModel: FlickrGalleryViewModel
     private lateinit var titleTextView: TextView
-//    private lateinit var thumbnailDownloader: ThumbnailDownloader<PhotoHolder>
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -52,10 +52,7 @@ class FlickrGalleryFragment : VisibleFragment() {
 
         titleTextView = view.findViewById(R.id.title_text_view)
         photoRecyclerView = view.findViewById(R.id.photo_recycler_view)
-        photoRecyclerView.layoutManager = GridLayoutManager(context, 3) // 3개의 열을 가진 GridLayout 사용
-
-        // ThumbnailDownloader의 생명주기를 관리하도록 옵저버 추가
-//        viewLifecycleOwner.lifecycle.addObserver(thumbnailDownloader.viewLifecycleObserver)
+        photoRecyclerView.layoutManager = GridLayoutManager(context, 4) // 4개의 열을 가진 GridLayout 사용
 
         return view
     }
@@ -98,12 +95,6 @@ class FlickrGalleryFragment : VisibleFragment() {
                             return false
                         }
                     })
-
-//                    검색 아이콘을 다시 눌렀을 때, 이전 검색어를 유지하도록 설정
-//                    setOnSearchClickListener {
-//                        searchView.setQuery(flickrGalleryViewModel.searchTerm, false)
-//                    }
-
                 }
 
                 // toggleItem을 다시 추가하여 Polling 상태를 반영하도록 수정
@@ -120,6 +111,10 @@ class FlickrGalleryFragment : VisibleFragment() {
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 return when (menuItem.itemId) {
+                    R.id.menu_item_tag -> {
+                        showTagSelectionDialog()
+                        true
+                    }
                     R.id.menu_item_clear -> {
                         flickrGalleryViewModel.fetchPhotos("")
                         true
@@ -245,10 +240,27 @@ class FlickrGalleryFragment : VisibleFragment() {
                     }
                 })
                 .into(holder.imageView) // 이미지를 보여줄 뷰
-
-//            thumbnailDownloader.queueThumbnail(holder, galleryItem.url)
         }
 
+    }
+
+    private fun showTagSelectionDialog() {
+        val tags = arrayOf("Featured","Abstract & Art",
+            "Animal & Wildlife", "Food & Drink", "Home & Garden", "Location",
+            "Music & Performance", "Nature & Scenery", "Sports & Action",
+            "Travel & Adventure", "Vehicles & Transportation")
+        AlertDialog.Builder(requireContext())
+            .setTitle("Select Tag")
+            .setItems(tags) { _, which ->
+                val selectedTag = tags[which]
+                fetchPhotosByTag(selectedTag)
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
+
+    private fun fetchPhotosByTag(tag: String) {
+        flickrGalleryViewModel.fetchPhotosTag(tag)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -259,21 +271,10 @@ class FlickrGalleryFragment : VisibleFragment() {
 
         flickrGalleryViewModel = ViewModelProvider(this).get(FlickrGalleryViewModel::class.java)
 
-        // Handler 생성 방식을 최신 방식으로 변경 (deprecated된 기본 생성자 제거)
-        /*
-        val responseHandler = Handler(Looper.getMainLooper())
-        thumbnailDownloader = ThumbnailDownloader(responseHandler) { photoHandler, bitmap ->
-            val drawable = BitmapDrawable(resources, bitmap)
-            photoHandler.bindDrawable(drawable)
-        }
-
-        lifecycle.addObserver(thumbnailDownloader.fragmentLifecycleObserver) // 프래그먼트 생명주기와 함께 옵저버 등록
-        */
     }
 
     override fun onDestroy() {
         super.onDestroy()
-//      lifecycle.removeObserver(thumbnailDownloader.fragmentLifecycleObserver) // 리소스 정리
     }
 
     /**
@@ -355,7 +356,6 @@ class FlickrGalleryFragment : VisibleFragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-//      viewLifecycleOwner.lifecycle.removeObserver(thumbnailDownloader.viewLifecycleObserver)
     }
 
     companion object {

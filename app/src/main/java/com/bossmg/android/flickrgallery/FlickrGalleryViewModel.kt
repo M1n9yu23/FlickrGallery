@@ -36,4 +36,8 @@ class FlickrGalleryViewModel(private val app: Application) : AndroidViewModel(ap
         QueryPreferences.setStoredQuery(app, query)
         mutableSearchTerm.value = query
     }
+
+    fun fetchPhotosTag(tag: String) {
+        mutableSearchTerm.value = tag
+    }
 }
