@@ -11,7 +11,7 @@
         android:protectionLevel="signature" />
 
     <application
-        android:name=".FlickrGalleryApplication"
+        android:name=".app.FlickrGalleryApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -22,11 +22,11 @@
         android:theme="@style/Theme.PhotoGallery"
         tools:targetApi="31">
         <activity
-            android:name=".FlickrPhotoPageActivity"
+            android:name=".ui.detail.FlickrPhotoPageActivity"
             android:exported="false"
             android:configChanges="keyboardHidden|orientation|screenSize"/>
         <activity
-            android:name=".FlickrGalleryActivity"
+            android:name=".ui.main.FlickrGalleryActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -36,7 +36,7 @@
         </activity>
 
         <receiver
-            android:name=".NotificationReceiver"
+            android:name=".util.NotificationReceiver"
             android:exported="false"
             android:permission="com.bossmg.android.flickrgallery.PRIVATE">
             <intent-filter android:priority="-999">

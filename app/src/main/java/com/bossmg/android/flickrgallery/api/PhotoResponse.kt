@@ -1,6 +1,6 @@
 package com.bossmg.android.flickrgallery.api
 
-import com.bossmg.android.flickrgallery.GalleryItem
+import com.bossmg.android.flickrgallery.data.GalleryItem
 import com.google.gson.annotations.SerializedName
 
 class PhotoResponse {

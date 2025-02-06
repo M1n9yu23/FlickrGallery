@@ -1,4 +1,4 @@
-package com.bossmg.android.flickrgallery
+package com.bossmg.android.flickrgallery.util
 
 import android.Manifest
 import android.app.Activity
@@ -11,6 +11,7 @@ import android.os.Build
 import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationManagerCompat
+import com.bossmg.android.flickrgallery.worker.PollWorker
 
 private const val TAG = "NotificationReceiver"
 

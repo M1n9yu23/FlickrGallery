@@ -1,9 +1,10 @@
-package com.bossmg.android.flickrgallery
+package com.bossmg.android.flickrgallery.ui.main
 
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.bossmg.android.flickrgallery.R
 
 class FlickrGalleryActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

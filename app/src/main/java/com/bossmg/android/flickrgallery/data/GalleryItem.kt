@@ -1,4 +1,4 @@
-package com.bossmg.android.flickrgallery
+package com.bossmg.android.flickrgallery.data
 
 import android.net.Uri
 import com.google.gson.annotations.SerializedName

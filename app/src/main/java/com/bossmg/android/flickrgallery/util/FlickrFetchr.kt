@@ -1,4 +1,4 @@
-package com.bossmg.android.flickrgallery
+package com.bossmg.android.flickrgallery.util
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -10,6 +10,7 @@ import com.bossmg.android.flickrgallery.api.FlickrApi
 import com.bossmg.android.flickrgallery.api.FlickrResponse
 import com.bossmg.android.flickrgallery.api.PhotoInterceptor
 import com.bossmg.android.flickrgallery.api.PhotoResponse
+import com.bossmg.android.flickrgallery.data.GalleryItem
 import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
 import retrofit2.Call

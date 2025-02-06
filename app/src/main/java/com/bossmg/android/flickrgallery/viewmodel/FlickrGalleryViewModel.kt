@@ -1,4 +1,4 @@
-package com.bossmg.android.flickrgallery
+package com.bossmg.android.flickrgallery.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
@@ -6,6 +6,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.liveData
 import androidx.lifecycle.switchMap
+import com.bossmg.android.flickrgallery.util.FlickrFetchr
+import com.bossmg.android.flickrgallery.data.GalleryItem
+import com.bossmg.android.flickrgallery.data.QueryPreferences
 
 class FlickrGalleryViewModel(private val app: Application) : AndroidViewModel(app) {
 

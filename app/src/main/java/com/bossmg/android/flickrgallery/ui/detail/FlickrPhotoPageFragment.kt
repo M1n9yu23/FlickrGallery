@@ -1,4 +1,4 @@
-package com.bossmg.android.flickrgallery
+package com.bossmg.android.flickrgallery.ui.detail
 
 import android.annotation.SuppressLint
 import android.net.Uri
@@ -11,6 +11,8 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
+import com.bossmg.android.flickrgallery.R
+import com.bossmg.android.flickrgallery.util.VisibleFragment
 
 
 private const val ARG_URI = "photo_page_url"

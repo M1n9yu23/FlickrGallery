@@ -1,4 +1,4 @@
-package com.bossmg.android.flickrgallery
+package com.bossmg.android.flickrgallery.util
 
 import android.app.Activity
 import android.content.BroadcastReceiver
@@ -8,6 +8,7 @@ import android.content.IntentFilter
 import android.util.Log
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.bossmg.android.flickrgallery.worker.PollWorker
 
 private const val TAG = "VisibleFragment"
 

@@ -1,4 +1,4 @@
-package com.bossmg.android.flickrgallery
+package com.bossmg.android.flickrgallery.data
 
 import android.content.Context
 import android.content.SharedPreferences

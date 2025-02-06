@@ -1,4 +1,4 @@
-package com.bossmg.android.flickrgallery
+package com.bossmg.android.flickrgallery.ui.main
 
 import android.content.Intent
 import android.graphics.drawable.Drawable
@@ -26,6 +26,13 @@ import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
+import com.bossmg.android.flickrgallery.viewmodel.FlickrGalleryViewModel
+import com.bossmg.android.flickrgallery.ui.detail.FlickrPhotoPageActivity
+import com.bossmg.android.flickrgallery.worker.PollWorker
+import com.bossmg.android.flickrgallery.R
+import com.bossmg.android.flickrgallery.util.VisibleFragment
+import com.bossmg.android.flickrgallery.data.GalleryItem
+import com.bossmg.android.flickrgallery.data.QueryPreferences
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
@@ -179,7 +186,8 @@ class FlickrGalleryFragment : VisibleFragment() {
         }
 
         override fun onClick(p0: View?) {
-            val intent = FlickrPhotoPageActivity.newIntent(requireContext(), galleryItem.photoPageUri)
+            val intent =
+                FlickrPhotoPageActivity.newIntent(requireContext(), galleryItem.photoPageUri)
             startActivity(intent)
         }
 

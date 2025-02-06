@@ -1,4 +1,4 @@
-package com.bossmg.android.flickrgallery
+package com.bossmg.android.flickrgallery.worker
 
 import android.app.Notification
 import android.app.PendingIntent
@@ -8,6 +8,12 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.work.Worker
 import androidx.work.WorkerParameters
+import com.bossmg.android.flickrgallery.util.FlickrFetchr
+import com.bossmg.android.flickrgallery.app.NOTIFICATION_CHANNEL_ID
+import com.bossmg.android.flickrgallery.R
+import com.bossmg.android.flickrgallery.data.GalleryItem
+import com.bossmg.android.flickrgallery.data.QueryPreferences
+import com.bossmg.android.flickrgallery.ui.main.FlickrGalleryActivity
 
 private const val TAG = "PollWorker"
 

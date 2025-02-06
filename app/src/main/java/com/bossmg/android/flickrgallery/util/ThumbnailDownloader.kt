@@ -1,4 +1,4 @@
-package com.bossmg.android.flickrgallery
+package com.bossmg.android.flickrgallery.util
 
 import android.annotation.SuppressLint
 import android.graphics.Bitmap

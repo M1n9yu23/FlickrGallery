@@ -1,9 +1,10 @@
-package com.bossmg.android.flickrgallery
+package com.bossmg.android.flickrgallery.app
 
 import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.os.Build
+import com.bossmg.android.flickrgallery.R
 
 const val NOTIFICATION_CHANNEL_ID = "flickr_poll"
 
