@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.MenuProvider
 import androidx.lifecycle.Lifecycle
@@ -38,6 +39,7 @@ private const val POLL_WORK = "POLL_WORK"
 class FlickrGalleryFragment : VisibleFragment() {
     private lateinit var photoRecyclerView: RecyclerView
     private lateinit var flickrGalleryViewModel: FlickrGalleryViewModel
+    private lateinit var titleTextView: TextView
 //    private lateinit var thumbnailDownloader: ThumbnailDownloader<PhotoHolder>
 
     override fun onCreateView(
@@ -48,6 +50,7 @@ class FlickrGalleryFragment : VisibleFragment() {
         // Fragment의 레이아웃을 인플레이트하고 뷰를 반환
         val view = inflater.inflate(R.layout.fragment_flickr_gallery, container, false)
 
+        titleTextView = view.findViewById(R.id.title_text_view)
         photoRecyclerView = view.findViewById(R.id.photo_recycler_view)
         photoRecyclerView.layoutManager = GridLayoutManager(context, 3) // 3개의 열을 가진 GridLayout 사용
 
@@ -65,6 +68,13 @@ class FlickrGalleryFragment : VisibleFragment() {
             viewLifecycleOwner,
             Observer { galleryItems ->
                 photoRecyclerView.adapter = PhotoAdapter(galleryItems)
+            })
+
+        flickrGalleryViewModel.galleryItemLiveData.observe(
+            viewLifecycleOwner,
+            Observer { items ->
+                titleTextView.text = if (flickrGalleryViewModel.searchTerm.isBlank()) "최근 사진"
+                else flickrGalleryViewModel.searchTerm
             })
 
         // onCreateOptionsMenu() & onOptionsItemSelected() 제거 후 MenuProvider 사용
