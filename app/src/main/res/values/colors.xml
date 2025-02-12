@@ -7,4 +7,7 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="primaryColor">#1E1E1E</color> <!-- 어두운 회색 -->
+    <color name="primaryDarkColor">#121212</color> <!-- 더 어두운 회색 -->
+    <color name="accentColor">#FF9800</color> <!-- 오렌지 (포인트 색상) -->
 </resources>
