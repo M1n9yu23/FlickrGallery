@@ -14,6 +14,7 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.MenuProvider
 import androidx.lifecycle.Lifecycle
@@ -44,48 +45,74 @@ import com.bumptech.glide.request.target.Target
 private const val TAG = "FlickrGalleryFragment"
 private const val POLL_WORK = "POLL_WORK"
 
+// Flickr에서 가져온 사진 목록을 표시하는 프래그먼트
+// RecyclerView를 사용하여 사진을 그리드 형태로 보여줌
 class FlickrGalleryFragment : VisibleFragment() {
     private lateinit var photoRecyclerView: RecyclerView
     private lateinit var flickrGalleryViewModel: FlickrGalleryViewModel
-    private lateinit var titleTextView: TextView
 
+    /**
+     * 프래그먼트의 뷰를 생성하는 메서드
+     * @param inflater: XML 레이아웃을 View 객체로 변환하는 객체
+     * @param container: 부모 컨테이너 뷰
+     * @param savedInstanceState: 이전 저장된 상태 (null 가능)
+     * @return 생성된 View 객체 반환
+     */
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Fragment의 레이아웃을 인플레이트하고 뷰를 반환
+        // 프래그먼트의 UI 레이아웃을 inflate하여 View 생성
         val view = inflater.inflate(R.layout.fragment_flickr_gallery, container, false)
 
-        titleTextView = view.findViewById(R.id.title_text_view)
+        // UI 요소 초기화
+//        titleTextView = view.findViewById(R.id.title_text_view)
         photoRecyclerView = view.findViewById(R.id.photo_recycler_view)
+
         photoRecyclerView.layoutManager = GridLayoutManager(context, 4) // 4개의 열을 가진 GridLayout 사용
 
         return view
     }
 
+    /**
+     * 프래그먼트의 뷰가 생성된 후 실행되는 메서드
+     * RecyclerView 어댑터 설정 및 데이터 변경 감지
+     */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         // ViewModel에서 데이터를 가져와 RecyclerView의 어댑터를 업데이트
         flickrGalleryViewModel.galleryItemLiveData.observe(
-            viewLifecycleOwner,
-            Observer { galleryItems ->
-                photoRecyclerView.adapter = PhotoAdapter(galleryItems)
-            })
+            viewLifecycleOwner
+        ) { galleryItems ->
+            photoRecyclerView.adapter = PhotoAdapter(galleryItems)
+        }
 
+        // ViewModel에서 검색어 상태를 가져와 제목을 설정
         flickrGalleryViewModel.galleryItemLiveData.observe(
-            viewLifecycleOwner,
-            Observer { items ->
-                titleTextView.text = if (flickrGalleryViewModel.searchTerm.isBlank()) "최근 사진"
-                else flickrGalleryViewModel.searchTerm
-            })
+            viewLifecycleOwner
+        ) {
+            val newTitle = if (flickrGalleryViewModel.searchTerm.isBlank()) {
+                "최근 사진"
+            } else {
+                flickrGalleryViewModel.searchTerm // 검색어를 앱바 제목으로 설정
+            }
+
+//                titleTextView.text = if (flickrGalleryViewModel.searchTerm.isBlank()) "최근 사진"
+//                else flickrGalleryViewModel.searchTerm
+
+            // 툴바(앱바)의 제목을 변경
+            (activity as AppCompatActivity).supportActionBar?.title = newTitle
+        }
 
         // onCreateOptionsMenu() & onOptionsItemSelected() 제거 후 MenuProvider 사용
+        // 메뉴 설정을 위해 MenuProvider 사용 (AndroidX 최신 방식)
         requireActivity().addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 menuInflater.inflate(R.menu.fragment_photo_gallery, menu)
 
+                // 검색 기능 추가
                 val searchItem: MenuItem = menu.findItem(R.id.menu_item_search)
                 val searchView = searchItem.actionView as SearchView
 
@@ -126,6 +153,9 @@ class FlickrGalleryFragment : VisibleFragment() {
                         flickrGalleryViewModel.fetchPhotos("")
                         true
                     }
+                    /**
+                     * Polling(백그라운드 업데이트) 활성화/비활성화 기능
+                     */
                     R.id.menu_item_toggle_polling -> {
                         val workManager = WorkManager.getInstance(requireContext())
                         val isPolling = QueryPreferences.isPolling(requireContext())
@@ -159,6 +189,9 @@ class FlickrGalleryFragment : VisibleFragment() {
 
     }
 
+    /**
+     * 사진 RecyclerView의 개별 아이템을 관리하는 ViewHolder
+     */
     private inner class PhotoHolder(view: View): RecyclerView.ViewHolder(view), View.OnClickListener{
         private lateinit var galleryItem: GalleryItem
 
@@ -203,6 +236,9 @@ class FlickrGalleryFragment : VisibleFragment() {
         }
     }
 
+    /**
+     * RecyclerView의 Adapter 클래스 (사진 목록을 관리)
+     */
     private inner class PhotoAdapter(private val galleryItems: List<GalleryItem>): RecyclerView.Adapter<PhotoHolder>(){
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhotoHolder {
             val view = layoutInflater.inflate(
@@ -284,83 +320,6 @@ class FlickrGalleryFragment : VisibleFragment() {
     override fun onDestroy() {
         super.onDestroy()
     }
-
-    /**
-     * @deprecated - 사용 안함.
-     *
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.fragment_photo_gallery, menu)
-
-        val searchItem: MenuItem = menu.findItem(R.id.menu_item_search)
-        val searchView = searchItem.actionView as SearchView
-
-        searchView.apply {
-            setOnQueryTextListener(object: SearchView.OnQueryTextListener {
-                override fun onQueryTextSubmit(query: String): Boolean {
-                    Log.d(TAG, "QueryTextSubmit: $query")
-                    flickrGalleryViewModel.fetchPhotos(query)
-                    return true
-                }
-
-                override fun onQueryTextChange(newText: String): Boolean {
-                    Log.d(TAG, "QueryTextChange: $newText")
-                    return false
-                }
-            })
-            setOnSearchClickListener {
-                searchView.setQuery(flickrGalleryViewModel.searchTerm, false)
-            }
-        }
-
-        val toggleItem= menu.findItem(R.id.menu_item_toggle_polling)
-        val isPolling = QueryPreferences.isPolling(requireContext())
-        val toggleItemTitle = if (isPolling) {
-            R.string.stop_polling
-        } else {
-            R.string.start_polling
-        }
-        toggleItem.setTitle(toggleItemTitle)
-    }
-    */
-
-    /**
-     * @deprecated - 사용 안함
-     *
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when(item.itemId) {
-            R.id.menu_item_clear -> {
-                flickrGalleryViewModel.fetchPhotos("")
-                true
-            }
-            R.id.menu_item_toggle_polling -> {
-                val workManager = WorkManager.getInstance(requireContext())
-                val isPolling = QueryPreferences.isPolling(requireContext())
-                if(isPolling){
-                    workManager.cancelUniqueWork(POLL_WORK)
-                    QueryPreferences.setPolling(requireContext(), false)
-                } else {
-                    val constraints = Constraints.Builder()
-                        .setRequiredNetworkType(NetworkType.UNMETERED)
-                        .build()
-                    val periodicRequest = PeriodicWorkRequest
-                        .Builder(PollWorker::class.java, 15, TimeUnit.MINUTES)
-                        .setConstraints(constraints)
-                        .build()
-                    workManager.enqueueUniquePeriodicWork(
-                        POLL_WORK,
-                        ExistingPeriodicWorkPolicy.KEEP,
-                        periodicRequest
-                    )
-                    QueryPreferences.setPolling(requireContext(), true)
-                }
-                activity?.invalidateOptionsMenu()
-                return true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
-    */
 
     override fun onDestroyView() {
         super.onDestroyView()
