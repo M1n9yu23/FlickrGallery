@@ -116,23 +116,4 @@ class FlickrFetchr {
 
         return responseLiveData
     }
-
-    /**
-     * 특정 URL에서 사진을 가져와 Bitmap으로 변환
-     * - 이 함수는 백그라운드 스레드에서 실행되어야 함 (`@WorkerThread` 어노테이션 추가)
-     * @param url: 사진의 원본 URL
-     * @return Bitmap 객체 (다운로드 실패 시 null 반환)
-     */
-    @WorkerThread
-    fun fetchPhoto(url: String): Bitmap? {
-        // 네트워크 요청을 동기적으로 실행 (execute 사용)
-        val response: Response<ResponseBody> = flickrApi.fetchUrlBytes(url).execute()
-
-        // 응답 본문에서 InputStream을 가져와 Bitmap으로 변환
-        val bitmap = response.body()?.byteStream()?.use(BitmapFactory::decodeStream)
-
-        Log.i(TAG, "Decoded bitmap=$bitmap from Response=$response")
-
-        return bitmap
-    }
 }
