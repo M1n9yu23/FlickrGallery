@@ -20,7 +20,7 @@ class PhotoInterceptor: Interceptor {
             .addQueryParameter("api_key", API_KEY) // Flickr API 키 추가 (필수)
             .addQueryParameter("format", "json") // 응답 형식을 JSON으로 지정
             .addQueryParameter("nojsoncallback", "1") // 콜백 제거 (JSON 형식 깨짐 방지)
-            .addQueryParameter("extras", "url_s") // 추가 정보 요청 (예: 작은 크기의 이미지 URL)
+            .addQueryParameter("extras", "url_s,owner_name,date_upload,date_taken,tags") // 추가 정보 요청 (예: 작은 크기의 이미지 URL)
             .addQueryParameter("safesearch","1") // 안전 검색 기능 활성화 (부적절한 이미지 제외)
             .build()
 
