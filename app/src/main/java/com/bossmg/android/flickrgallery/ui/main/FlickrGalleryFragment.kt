@@ -21,6 +21,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.work.Constraints
 import androidx.work.ExistingPeriodicWorkPolicy
@@ -35,6 +36,7 @@ import com.bossmg.android.flickrgallery.util.VisibleFragment
 import com.bossmg.android.flickrgallery.data.GalleryItem
 import com.bossmg.android.flickrgallery.data.QueryPreferences
 import com.bumptech.glide.Glide
+import com.bumptech.glide.Glide.init
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
@@ -70,8 +72,7 @@ class FlickrGalleryFragment : VisibleFragment() {
 //        titleTextView = view.findViewById(R.id.title_text_view)
         photoRecyclerView = view.findViewById(R.id.photo_recycler_view)
 
-        photoRecyclerView.layoutManager = GridLayoutManager(context, 4) // 4개의 열을 가진 GridLayout 사용
-
+        photoRecyclerView.layoutManager = LinearLayoutManager(context)
         return view
     }
 
@@ -195,8 +196,11 @@ class FlickrGalleryFragment : VisibleFragment() {
     private inner class PhotoHolder(view: View): RecyclerView.ViewHolder(view), View.OnClickListener{
         private lateinit var galleryItem: GalleryItem
 
-        val imageView: ImageView = itemView.findViewById(R.id.item_image_view)
-        val progressBar: ProgressBar = itemView.findViewById(R.id.progressBar)
+        private val imageView: ImageView = itemView.findViewById(R.id.item_image_view)
+        private val ownerTextView: TextView = itemView.findViewById(R.id.item_owner_text_view)
+        private val dateTextView: TextView = itemView.findViewById(R.id.item_date_text_view)
+        private val progressBar: ProgressBar = itemView.findViewById(R.id.progressBar)
+        private val tagTextView: TextView = itemView.findViewById(R.id.item_tags_text_view)
 
         init {
             itemView.setOnClickListener(this)
@@ -214,8 +218,55 @@ class FlickrGalleryFragment : VisibleFragment() {
             imageView.setImageDrawable(drawable)
         }
 
-        fun bindGalleryItem(item: GalleryItem) {
-            galleryItem = item
+        fun bind(galleryItem: GalleryItem) {
+            this.galleryItem = galleryItem
+            ownerTextView.text = "작성자: ${galleryItem.ownerName}"
+            dateTextView.text = "업로드 날짜: ${convertTimestampToDate(galleryItem.dateUpload)}"
+            tagTextView.text = if (galleryItem.tags.isNotEmpty()) {
+                "태그: ${galleryItem.tags}"
+            } else {
+                "태그 없음"
+            }
+
+            // ProgressBar 보이기 (로딩 시작)
+            progressBar.visibility = View.VISIBLE
+
+            Glide.with(itemView.context)
+                .load(galleryItem.url) // 가져올 이미지
+                .listener(object : RequestListener<Drawable> { // 이미지 로딩 상태를 감지하고 특정 작업을 수행
+                    override fun onLoadFailed(
+                        e: GlideException?,
+                        model: Any?,
+                        target: Target<Drawable>,
+                        isFirstResource: Boolean
+                    ): Boolean {
+                        progressBar.visibility = View.GONE // 로딩 실패 시 ProgressBar 숨기기
+                        return false // false를 반환해야 계속 실행됨.
+                    }
+
+                    override fun onResourceReady(
+                        resource: Drawable,
+                        model: Any,
+                        target: Target<Drawable>?,
+                        dataSource: DataSource,
+                        isFirstResource: Boolean
+                    ): Boolean {
+                        progressBar.visibility = View.GONE // 이미지 로딩 완료 후 ProgressBar 숨김
+                        return false
+                    }
+                })
+                .into(imageView) // 이미지를 보여줄 뷰
+        }
+
+        private fun convertTimestampToDate(timestamp: String): String {
+            return try {
+                val timeInMillis = timestamp.toLong() * 1000
+                val date = java.util.Date(timeInMillis)
+                val format = java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.getDefault())
+                format.format(date)
+            } catch (e: Exception) {
+                "날짜 정보 없음"
+            }
         }
 
         override fun onClick(p0: View?) {
@@ -253,37 +304,8 @@ class FlickrGalleryFragment : VisibleFragment() {
 
         override fun onBindViewHolder(holder: PhotoHolder, position: Int) {
             val galleryItem = galleryItems[position]
-            holder.bindGalleryItem(galleryItem)
+            holder.bind(galleryItem)
 
-            // ProgressBar 보이기 (로딩 시작)
-            holder.progressBar.visibility = View.VISIBLE
-
-            Glide.with(holder.itemView.context)
-                .load(galleryItem.url) // 가져올 이미지
-                .error(android.R.drawable.stat_notify_error) // 에러 이미지
-                .listener(object : RequestListener<Drawable> { // 이미지 로딩 상태를 감지하고 특정 작업을 수행
-                    override fun onLoadFailed(
-                        e: GlideException?,
-                        model: Any?,
-                        target: Target<Drawable>,
-                        isFirstResource: Boolean
-                    ): Boolean {
-                        holder.progressBar.visibility = View.GONE // 로딩 실패 시 ProgressBar 숨기기
-                        return false // false를 반환해야 계속 실행됨.
-                    }
-
-                    override fun onResourceReady(
-                        resource: Drawable,
-                        model: Any,
-                        target: Target<Drawable>?,
-                        dataSource: DataSource,
-                        isFirstResource: Boolean
-                    ): Boolean {
-                        holder.progressBar.visibility = View.GONE // 이미지 로딩 완료 후 ProgressBar 숨김
-                        return false // false를 반환해야 계속 실행됨.
-                    }
-                })
-                .into(holder.imageView) // 이미지를 보여줄 뷰
         }
 
     }
@@ -310,19 +332,8 @@ class FlickrGalleryFragment : VisibleFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // retainInstance = true 이렇게 유보 하는건 피해야함. FragmentManager가 자동으로 Fragment 상태를 복원하므로 불필요함.
-        // setHasOptionsMenu(true) MenuProvider를 사용하므로 불필요
-
         flickrGalleryViewModel = ViewModelProvider(this).get(FlickrGalleryViewModel::class.java)
 
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
     }
 
     companion object {
