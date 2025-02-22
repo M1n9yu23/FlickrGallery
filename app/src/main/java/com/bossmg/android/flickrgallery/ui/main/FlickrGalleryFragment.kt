@@ -69,7 +69,6 @@ class FlickrGalleryFragment : VisibleFragment() {
         val view = inflater.inflate(R.layout.fragment_flickr_gallery, container, false)
 
         // UI 요소 초기화
-//        titleTextView = view.findViewById(R.id.title_text_view)
         photoRecyclerView = view.findViewById(R.id.photo_recycler_view)
 
         photoRecyclerView.layoutManager = LinearLayoutManager(context)
@@ -99,9 +98,6 @@ class FlickrGalleryFragment : VisibleFragment() {
             } else {
                 flickrGalleryViewModel.searchTerm // 검색어를 앱바 제목으로 설정
             }
-
-//                titleTextView.text = if (flickrGalleryViewModel.searchTerm.isBlank()) "최근 사진"
-//                else flickrGalleryViewModel.searchTerm
 
             // 툴바(앱바)의 제목을 변경
             (activity as AppCompatActivity).supportActionBar?.title = newTitle
