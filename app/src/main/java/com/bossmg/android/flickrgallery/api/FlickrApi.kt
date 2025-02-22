@@ -22,14 +22,6 @@ interface FlickrApi {
     // - Retrofit이 비동기 네트워크 요청을 처리하는 Call 객체 반환
     // - FlickrResponse: API 응답을 저장할 클래스
 
-    // 주어진 URL에서 원본 바이트 데이터를 가져오는 API 호출
-    // 특정 URL을 직접 요청하는 용도로 사용
-    @GET
-    fun fetchUrlBytes(@Url url: String): Call<ResponseBody>
-    // 반환 타입: Call<ResponseBody>
-    // - ResponseBody: 응답의 원본 바이트 데이터를 포함 (예: 이미지 다운로드)
-    // - @Url: 동적으로 URL을 전달받아 요청을 보낼 수 있도록 함
-
     // Flickr에서 검색어에 해당 되는 사진을 검색하는 API 호출
     @GET("services/rest?method=flickr.photos.search")
     fun searchPhotos(@Query("text") query: String): Call<FlickrResponse>
