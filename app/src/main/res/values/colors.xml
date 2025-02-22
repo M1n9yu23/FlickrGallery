@@ -5,9 +5,14 @@
     <color name="purple_700">#FF3700B3</color>
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
-    <color name="black">#FF000000</color>
+    <color name="black">#000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="gray">#888888</color>
     <color name="primaryColor">#1E1E1E</color> <!-- 어두운 회색 -->
     <color name="primaryDarkColor">#121212</color> <!-- 더 어두운 회색 -->
     <color name="accentColor">#FF9800</color> <!-- 오렌지 (포인트 색상) -->
+    <color name="cardBackground">#F5F5F5</color> <!-- 밝은 회색 -->
+    <color name="textPrimary">#1A237E</color> <!-- 진한 남색 -->
+    <color name="textSecondary">#5C6BC0</color> <!-- 연한 남색 -->
+    <color name="primaryAccent">#2962FF</color> <!-- 밝은 파란색 -->
 </resources>
