@@ -49,7 +49,6 @@
 | 기술 | 설명 |
 | --- | --- |
 | 언어 | Kotlin |
-| 아키텍처 | MVVM |
 | UI | XML |
 | UI와 데이터 연결 | LiveData & ViewModel |
 | 네트워크 | Retrofit2 + OkHttp3 + GsonConverterFactory |
