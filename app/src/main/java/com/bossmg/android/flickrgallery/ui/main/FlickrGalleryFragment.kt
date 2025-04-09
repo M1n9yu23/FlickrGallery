@@ -208,12 +208,6 @@ class FlickrGalleryFragment : VisibleFragment() {
             }
         }
 
-        @Deprecated("사용 X")
-        val bindDrawable: (Drawable) -> Unit = { drawable ->
-            progressBar.visibility = View.GONE // 이미지 로딩 후 ProgressBar 숨기기
-            imageView.setImageDrawable(drawable)
-        }
-
         fun bind(galleryItem: GalleryItem) {
             this.galleryItem = galleryItem
             ownerTextView.text = "작성자: ${galleryItem.ownerName}"
