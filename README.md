@@ -8,7 +8,7 @@ WebView를 통해 사진 상세 페이지로 이동할 수 있으며, 공유 기
 
 # 📘 프로젝트 개요
 
-이 프로젝트는 가장 인상 깊게 읽은 책인 *Android Programming: The Big Nerd Ranch Guide (4th Edition)*를 기반으로 시작하였습니다.
+이 프로젝트는 가장 인상 깊게 읽은 책인 *Android Programming: The Big Nerd Ranch Guide (4th Edition)* 를 기반으로 시작하였습니다.
 
 책의 내용을 참고하되, **지원이 중단된 API를 최신 버전으로 교체하고**, **Glide를 활용한 이미지 최적화**, **UI/UX 개선**, 그리고 **여러 기능을 확장** 하였습니다.
 
