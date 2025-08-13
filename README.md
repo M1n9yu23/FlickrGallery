@@ -1,5 +1,3 @@
-![gallery_main](https://github.com/user-attachments/assets/967dbf31-c0cc-431a-ac97-3ac370838c12)
-
 # 💡 프로젝트 설명
 
 이 프로젝트는 학습 목적의 프로젝트입니다.
